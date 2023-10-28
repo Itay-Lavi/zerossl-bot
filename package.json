@@ -1,0 +1,17 @@
+{
+  "name": "zerossl-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node dist/app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "zerossl": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.9"
+  }
+}
