@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "typescript": "^5.2.2",
     "zerossl": "^2.0.0"
   },
   "devDependencies": {

@@ -7,6 +7,7 @@ import {
   downloadAuthFile,
   downloadCertificate,
 } from './utils/certificate/download';
+import runServer from './server';
 
 async function main() {
   try {
@@ -20,7 +21,8 @@ async function main() {
       certificate = checkResult.certificate;
     }
 
-    await downloadAuthFile(certificate);
+    const authFileName = await downloadAuthFile(certificate);
+    runServer(authFileName);
     await verifyCertificate(certificate.id);
     await downloadCertificate(certificate.id);
 
@@ -29,6 +31,7 @@ async function main() {
     console.error('Error occurred:', error);
     process.exit(1);
   }
+  process.exit(0);
 }
 
 main();

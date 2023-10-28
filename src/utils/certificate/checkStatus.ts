@@ -1,8 +1,16 @@
 import { CertificateRecord } from 'zerossl/lib/types';
-import { checkIfFileExist } from '../../data/localService';
+import { checkIfFileExists } from '../../data/localService';
 import ZeroSSLManager from '../../data/zeroSSLManager';
+import {
+  certificateName,
+  dhparamName,
+  privateKey,
+  sslDirectory,
+} from '../../config';
 
 async function checkStatus() {
+  await waitForDhparam();
+
   const zerossl = ZeroSSLManager.getZeroSSLInstance();
   const domain = process.env.DOMAIN;
   const certificates = await zerossl.listCertificates({ search: domain });
@@ -30,7 +38,10 @@ async function checkStatus() {
 
 function handleIssuedCertificate(issuedCertificate: CertificateRecord) {
   if (checkIfCertsDownloaded()) {
-    throw `There is an active certificate:\n${issuedCertificate.common_name}`;
+    console.log(
+      `There is an active certificate:\n${issuedCertificate.common_name}`
+    );
+    process.exit(0);
   } else {
     console.log(`There is an active certificate, but not downloaded!`);
     return { createNew: false, certificate: issuedCertificate };
@@ -58,9 +69,36 @@ function handleExpiredOrCanceledCertificate() {
 
 function checkIfCertsDownloaded() {
   return (
-    checkIfFileExist({ fileDirectory: 'ssl\\', fileName: 'private.key' }) &&
-    checkIfFileExist({ fileDirectory: 'ssl\\', fileName: 'certificate.crt' })
+    checkIfFileExists({
+      fileDirectory: sslDirectory,
+      fileName: privateKey,
+    }) &&
+    checkIfFileExists({
+      fileDirectory: sslDirectory,
+      fileName: certificateName,
+    })
   );
+}
+
+async function waitForDhparam() {
+  if (
+    checkIfFileExists({
+      fileDirectory: sslDirectory,
+      fileName: dhparamName,
+    })
+  ) {
+    return;
+  }
+
+  console.log('Waiting for ' + dhparamName);
+  let fileExists: boolean = false;
+  do {
+    fileExists = checkIfFileExists({
+      fileDirectory: sslDirectory,
+      fileName: dhparamName,
+    });
+    await new Promise((resolve) => setTimeout(resolve, 1 * 60 * 1000));
+  } while (!fileExists);
 }
 
 export default checkStatus;

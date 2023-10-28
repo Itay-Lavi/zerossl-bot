@@ -5,7 +5,7 @@ class ZeroSSLManager {
   private static zerossl: ZeroSSL;
 
   private constructor() {
-    ZeroSSLManager.zerossl = new ZeroSSL({ accessKey });
+    ZeroSSLManager.zerossl = new ZeroSSL({ accessKey } as {accessKey: string});
   }
 
   public static getZeroSSLInstance(): ZeroSSL {

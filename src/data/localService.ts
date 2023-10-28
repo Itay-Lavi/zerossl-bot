@@ -1,8 +1,9 @@
 import * as fs from 'fs';
-import * as os from 'os';
-import * as path from 'path';
 
-const homeDirectory: string = `${os.homedir()}\\`;
+import * as path from 'path';
+import { homeDirectory } from '../config';
+
+
 
 export function saveTextToFile({
   data,
@@ -13,6 +14,7 @@ export function saveTextToFile({
   fileDirectory: string;
   fileName: string;
 }) {
+
   const filePath: string = path.join(homeDirectory,fileDirectory, fileName);
   
   const fileAbsoluteDir = path.join(homeDirectory,fileDirectory);
@@ -29,7 +31,7 @@ export function saveTextToFile({
   }
 }
 
-export function checkIfFileExist({
+export function checkIfFileExists({
   fileDirectory,
   fileName,
 }: {

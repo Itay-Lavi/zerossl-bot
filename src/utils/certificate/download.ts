@@ -1,7 +1,7 @@
 import { Certificate, CertificateRecord } from 'zerossl/lib/types';
 import ZeroSSLManager from '../../data/zeroSSLManager';
-import { domain } from '../../config';
-import { checkIfFileExist, saveTextToFile } from '../../data/localService';
+import { certificateName, domain, sslDirectory, sslValidationDirectory } from '../../config';
+import { checkIfFileExists, saveTextToFile } from '../../data/localService';
 
 export async function downloadCertificate(id: string) {
   const zerossl = ZeroSSLManager.getZeroSSLInstance();
@@ -17,19 +17,19 @@ export async function downloadCertificate(id: string) {
 
   console.log('Certificate downloaded successfully!');
 
-  const mergedCertificate = certificate['certificate.crt'].concat(
+  const mergedCertificate = certificate[certificateName].concat(
     certificate['ca_bundle.crt']
   );
 
   saveTextToFile({
     data: mergedCertificate,
-    fileDirectory: 'ssl\\',
-    fileName: 'certificate.crt',
+    fileDirectory: sslDirectory,
+    fileName: certificateName,
   });
 }
 
 export async function downloadAuthFile(cert: CertificateRecord) {
-  const domainValidation = cert.validation.other_methods[domain];
+  const domainValidation = cert.validation.other_methods[domain!];
 
   const fileContent: string[] = domainValidation.file_validation_content;
   let fileName: string;
@@ -45,11 +45,13 @@ export async function downloadAuthFile(cert: CertificateRecord) {
 
   const content = fileContent.join('\n');
 
-  const authFileExist = checkIfFileExist({
-    fileDirectory: 'validation\\',
+  const authFileExist = checkIfFileExists({
+    fileDirectory: sslValidationDirectory,
     fileName,
   });
   if (!authFileExist) {
-    saveTextToFile({ data: content, fileDirectory: 'validation\\', fileName });
+    saveTextToFile({ data: content, fileDirectory: sslValidationDirectory, fileName });
   }
+
+  return fileName;
 }

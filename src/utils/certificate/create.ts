@@ -1,4 +1,4 @@
-import { domain, email } from '../../config';
+import { domain, email, privateKey, sslDirectory } from '../../config';
 import { saveTextToFile } from '../../data/localService';
 import ZeroSSLManager from '../../data/zeroSSLManager';
 
@@ -13,14 +13,14 @@ async function createCertificate() {
     organization: '',
     organizationUnit: '',
     email: email,
-    commonName: domain,
+    commonName: domain!,
   };
   const csr = zerossl.generateCSR(keyPair, csrOptions);
 
   console.log('Creating certificate');
   const certificate = await zerossl.createCertificate({
     csr: csr,
-    domains: [domain],
+    domains: [domain!],
     validityDays: 90,
     strictDomains: true,
   });
@@ -35,8 +35,8 @@ async function createCertificate() {
 
   saveTextToFile({
     data: keyPair.privateKey,
-    fileDirectory: 'ssl\\',
-    fileName: 'private.key',
+    fileDirectory: sslDirectory,
+    fileName: privateKey,
   });
 
   return newCertificate;
