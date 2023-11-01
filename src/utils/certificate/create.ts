@@ -28,7 +28,7 @@ async function createCertificate() {
   await new Promise((resolve) => setTimeout(resolve, 2000)); //wait 2 seconds
   const newCertificate = await zerossl.getCertificate(certificate.id);
   if (newCertificate) {
-    console.log('Created certificate');
+    console.log('Certificate created');
   } else {
     throw 'Failed to create certificate.';
   }
