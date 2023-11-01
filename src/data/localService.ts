@@ -1,9 +1,7 @@
 import * as fs from 'fs';
 
 import * as path from 'path';
-import { homeDirectory } from '../config';
-
-
+import { homeDirectory, sslValidationDirectory } from '../config';
 
 export function saveTextToFile({
   data,
@@ -14,10 +12,9 @@ export function saveTextToFile({
   fileDirectory: string;
   fileName: string;
 }) {
+  const filePath: string = path.join(homeDirectory, fileDirectory, fileName);
 
-  const filePath: string = path.join(homeDirectory,fileDirectory, fileName);
-  
-  const fileAbsoluteDir = path.join(homeDirectory,fileDirectory);
+  const fileAbsoluteDir = path.join(homeDirectory, fileDirectory);
   try {
     if (!fs.existsSync(fileAbsoluteDir)) {
       fs.mkdirSync(fileAbsoluteDir, { recursive: true });
@@ -28,6 +25,24 @@ export function saveTextToFile({
   } catch (error) {
     console.error('Error writing file:', error);
     throw error;
+  }
+}
+
+export function clearValidationFolder(folderPath: string) {
+  if (fs.existsSync(folderPath)) {
+    fs.readdirSync(folderPath).forEach((file) => {
+      const filePath = path.join(folderPath, file);
+      if (fs.lstatSync(filePath).isDirectory()) {
+        // If it's a directory, recursively delete its contents and the directory itself
+        clearValidationFolder(filePath);
+      } else {
+        // If it's a file, delete the file
+        fs.unlinkSync(filePath);
+      }
+    });
+    // After deleting all files and subdirectories, delete the main directory
+    fs.rmdirSync(folderPath);
+    console.log('Deleted all auth files in validation folder');
   }
 }
 
