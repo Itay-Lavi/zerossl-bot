@@ -1,15 +1,14 @@
-import { deploymentSelectors } from "../config";
-import { deletePodsByLabelSelector } from "../data/networkService";
+import { deploymentSelectors } from '../config';
+import KubernetesService from '../data/networkService';
 
-
-export async function restartPodByLabelSelector() {
-    try {
-     const selectors = deploymentSelectors!.split(',');
-     for (const selector of selectors) {
-        await deletePodsByLabelSelector(selector);
-        console.log(selector + ' pods deleted successfully');
-     }
-    } catch (err) {
-      console.error(`Error restarting pods: ${err}`);
+export async function restartPodsByLabelSelector() {
+  try {
+    const selectors = deploymentSelectors!.split(',');
+    for (const selector of selectors) {
+      await KubernetesService.getInstance().deletePodsByLabelSelector(selector);
+      console.log(selector + ' pod deleted successfully');
     }
+  } catch (err: Error | any) {
+    console.error(`Error restarting pods: ${err.message}`);
   }
+}

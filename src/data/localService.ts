@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
 import * as path from 'path';
-import { homeDirectory, sslValidationDirectory } from '../config';
+import { homeDirectory } from '../config';
 
 export function saveTextToFile({
   data,
@@ -26,6 +26,13 @@ export function saveTextToFile({
     console.error('Error writing file:', error);
     throw error;
   }
+}
+
+export function readTextFromFile(absolutePath: string) {
+  if (!fs.existsSync(absolutePath)) {
+    throw new Error('File does not exist');
+  }
+  return fs.readFileSync(absolutePath, 'utf8');
 }
 
 export function clearValidationFolder(folderPath: string) {
