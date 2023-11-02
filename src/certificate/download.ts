@@ -1,7 +1,7 @@
 import { Certificate, CertificateRecord } from 'zerossl/lib/types';
-import ZeroSSLManager from '../../data/zeroSSLManager';
-import { certificateName, domain, sslDirectory, sslValidationDirectory } from '../../config';
-import { checkIfFileExists, saveTextToFile } from '../../data/localService';
+import ZeroSSLManager from '../data/zeroSSLManager';
+import { certificateName, domain, sslDirectory, sslValidationDirectory } from '../config';
+import { checkIfFileExists, saveTextToFile } from '../data/localService';
 
 export async function downloadCertificate(id: string) {
   const zerossl = ZeroSSLManager.getZeroSSLInstance();

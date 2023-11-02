@@ -1,12 +1,12 @@
 import { CertificateRecord } from 'zerossl/lib/types';
-import { checkIfFileExists } from '../../data/localService';
-import ZeroSSLManager from '../../data/zeroSSLManager';
+import { checkIfFileExists } from '../data/localService';
+import ZeroSSLManager from '../data/zeroSSLManager';
 import {
   certificateName,
   dhparamName,
   privateKey,
   sslDirectory,
-} from '../../config';
+} from '../config';
 
 async function checkStatus() {
   await waitForDhparam();

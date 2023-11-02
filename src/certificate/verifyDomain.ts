@@ -1,5 +1,5 @@
-import { domain } from '../../config';
-import ZeroSSLManager from '../../data/zeroSSLManager';
+import { domain } from '../config';
+import ZeroSSLManager from '../data/zeroSSLManager';
 
 async function verifyDomain(id: string) {
   const zerossl = ZeroSSLManager.getZeroSSLInstance();

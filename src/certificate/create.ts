@@ -1,6 +1,6 @@
-import { domain, email, privateKey, sslDirectory } from '../../config';
-import { saveTextToFile } from '../../data/localService';
-import ZeroSSLManager from '../../data/zeroSSLManager';
+import { domain, email, privateKey, sslDirectory } from '../config';
+import { saveTextToFile } from '../data/localService';
+import ZeroSSLManager from '../data/zeroSSLManager';
 
 async function createCertificate() {
   const zerossl = ZeroSSLManager.getZeroSSLInstance();

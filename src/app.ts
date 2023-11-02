@@ -1,15 +1,16 @@
 import * as path from 'path';
 import { CertificateRecord } from 'zerossl/lib/types';
-import checkStatus from './utils/certificate/checkStatus';
-import createCertificate from './utils/certificate/create';
-import verifyCertificate from './utils/certificate/verifyDomain';
+import checkStatus from './certificate/checkStatus';
+import createCertificate from './certificate/create';
+import verifyCertificate from './certificate/verifyDomain';
 import validateENV from './utils/validateENV';
 import {
   downloadAuthFile,
   downloadCertificate,
-} from './utils/certificate/download';
+} from './certificate/download';
 import { homeDirectory, sslValidationDirectory } from './config';
 import { clearValidationFolder } from './data/localService';
+import { restartPodByLabelSelector } from './kubernetes/managePods';
 
 async function main() {
   try {
@@ -26,6 +27,7 @@ async function main() {
     await downloadAuthFile(certificate);
     await verifyCertificate(certificate.id);
     await downloadCertificate(certificate.id);
+    await restartPodByLabelSelector();
 
     const sslValidationFolderPath: string = path.join(homeDirectory, sslValidationDirectory);
     clearValidationFolder(sslValidationFolderPath);

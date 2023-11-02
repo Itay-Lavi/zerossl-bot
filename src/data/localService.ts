@@ -42,7 +42,7 @@ export function clearValidationFolder(folderPath: string) {
     });
     // After deleting all files and subdirectories, delete the main directory
     fs.rmdirSync(folderPath);
-    console.log('Deleted all auth files in validation folder');
+    console.log('Cleared all auth files in validation folder');
   }
 }
 

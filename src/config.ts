@@ -3,6 +3,7 @@ import * as os from 'os';
 export const accessKey = process.env.ZEROSSL_ACCESS_KEY;
 export const domain = process.env.DOMAIN;
 export const email = process.env.EMAIL;
+export const deploymentSelectors = process.env.DEPLOYMENT_SELECTOR_ARR;
 
 export const sslDirectory = 'ssl';
 export const sslValidationDirectory = 'ssl-validation';
