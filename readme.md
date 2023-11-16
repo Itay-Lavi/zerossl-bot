@@ -37,7 +37,32 @@ The ZeroSSL NodeJS Bot is a utility designed to manage SSL certificates for your
    ```bash
    kubectl apply -f zerossl-bot.yaml
 *   **Note:** Main service must run, even in the first time
+4. **Run job manually**
+   ```bash
+   kubectl create job --from=cronjob/zerossl-bot-cron ssl
+5. **Generate dhparam.pem:**
+   ```bash
+   openssl dhparam -out dhparam.pem 2048
+6. **Copy it to zerossl pod:**
+   ```bash
+   kubectl cp dhparam.pem <namespace>/<pod-name>:/root/ssl/dhparam.pem
+7. **Wait 1 minute and follow the logs:**
+   ```bash
+   kubectl logs -f <pod-name>
+### Issues
 
+- **The range of valid ports is 30000-32767**
+
+1. **Run this command**
+   ```bash
+   sudo nano /var/snap/microk8s/current/args/kube-apiserver
+1. **Add or Edit --service-node-port-range line**
+   ```bash
+   --service-node-port-range=80-32767
+2. **Restart**
+    ```bash
+   sudo microk8s.stop
+   sudo microk8s.start
 ### License
 This project is licensed under the MIT License.
 
